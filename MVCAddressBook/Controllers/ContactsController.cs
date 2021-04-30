@@ -17,13 +17,13 @@ namespace MVCAddressBook.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
-        private readonly UserManager<IdentityUser> _userManager;
+        //private readonly UserManager<IdentityUser> _userManager;
 
-        public ContactsController(ApplicationDbContext context, IImageService imageService, UserManager<IdentityUser> userManager)
+        public ContactsController(ApplicationDbContext context, IImageService imageService) //UserManager<IdentityUser> userManager)
         {
             _context = context;
             _imageService = imageService;
-            _userManager = userManager;
+            //_userManager = userManager;
         }
 
         // GET: Contacts
@@ -32,6 +32,7 @@ namespace MVCAddressBook.Controllers
             var model = await _context.Contact
                 .Include(c => c.Category)
                 .ToListAsync();
+
             return View(model);
         }
 
@@ -44,7 +45,7 @@ namespace MVCAddressBook.Controllers
             }
 
             var contact = await _context.Contact
-                .Include(c => c.Category)
+                .Include(c => c.CategoryType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)
             {
@@ -58,7 +59,7 @@ namespace MVCAddressBook.Controllers
         public IActionResult Create()
         {
 
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryType");
             return View();
         }
 
@@ -67,7 +68,7 @@ namespace MVCAddressBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryId,ContactId,FirstName,LastName,StreetAddress,City,States,ZipCode,HomePhone,WorkPhone,CellPhone,FaxNumber,Email")] Contact contact, IFormFile Poster)
+        public async Task<IActionResult> Create([Bind("Id,CategoryId,CategoryType,ContactId,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,WorkPhone,CellPhone,FaxNumber,Email")] Contact contact, IFormFile Poster)
         {
 
             if (ModelState.IsValid)
@@ -79,7 +80,7 @@ namespace MVCAddressBook.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", contact.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryType", contact.CategoryId);
             return View(contact);
         }
 
@@ -96,7 +97,7 @@ namespace MVCAddressBook.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", contact.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryType", contact.CategoryId);
             return View(contact);
         }
 
@@ -105,7 +106,7 @@ namespace MVCAddressBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ContactId,FirstName,LastName,StreetAddress,City,States,ZipCode,HomePhone,WorkPhone,CellPhone,FaxNumber,Email,Poster,ContentType")] Contact contact, IFormFile NewPoster)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ContactId,CategoryType,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,WorkPhone,CellPhone,FaxNumber,Email,Poster,ContentType")] Contact contact, IFormFile NewPoster)
         {
             if (id != contact.Id)
             {
@@ -138,7 +139,7 @@ namespace MVCAddressBook.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "ContactName", contact.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryType", contact.CategoryId);
             return View(contact);
         }
 

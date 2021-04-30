@@ -12,6 +12,7 @@ namespace MVCAddressBook.Enums
     {
         Work,
         Family,
-        Friends
+        Friends,
+        School
     }
 }

@@ -59,7 +59,7 @@ namespace MVCAddressBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryId,ContactId,Name")] Category category, IFormFile Poster)
+        public async Task<IActionResult> Create([Bind("Id,CategoryId,ContactId,CategoryType")] Category category, IFormFile Poster)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace MVCAddressBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,ContactId,Name")] Category category, IFormFile NewPoster)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,ContactId,CategoryType")] Category category, IFormFile NewPoster)
         {
             if (id != category.Id)
             {

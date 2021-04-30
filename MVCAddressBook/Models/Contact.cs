@@ -13,7 +13,8 @@ namespace MVCAddressBook.Models
         public int Id { get; set; }
 
         public int CategoryId { get; set; }  //Connects to the Category Category below - is the actual Id property of one Category record
-        public Category Category { get; set; } //Let's each contact access the information of their category
+        
+        public CategoryType CategoryType { get; set; } //Let's each contact access the information of their category
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }  //Name of Contact
@@ -54,6 +55,7 @@ namespace MVCAddressBook.Models
         public byte[] Poster { get; set; }
         public string ContentType { get; set; }
 
+        public Category Category { get; set; }
 
     }
 }

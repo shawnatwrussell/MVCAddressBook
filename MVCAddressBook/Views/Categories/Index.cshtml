@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<MVCAddressBook.Models.Category>
 
+@using MVCAddressBook.Services
+@inject IImageService _imageService
+
 @using MVCAddressBook.Enums
 
 @{
@@ -11,34 +14,52 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Category Type
-            </th>
-            <th>
-                Name
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<!--CARDS SECTION-->
+<div class="card-deck">
+    @foreach (var category in Model)
+    {
+        <div class="col-4">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                <img class="card-img-top" src="@_imageService.DecodePoster(category.Poster, category.ContentType)" alt="Card image cap" />
+                <div class="card-body">
+                    <h5 class="card-title align-center">@category.CategoryType</h5>
+                    <a asp-action="Edit" asp-route-id="@category.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@category.Id">Delete</a>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button data-toggle="modal" data-target="#modal-@category.Id" class="btn btn-primary align-content-end">@category.Name</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!--MODAL SECTION-->
+@foreach (var category in Model)
+{
+    <!--MOVIE OVERVIEW/DETAILS-->
+    <div class="modal fade" id="modal-@category.Id" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@category.CategoryType</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img class="card-img-top" src="@_imageService.DecodePoster(category.Poster, category.ContentType)" alt="Card image cap" />
+                    <p>@category.CategoryType"</p>
+                    <a asp-action="Edit" asp-route-id="@category.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@category.Id">Delete</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--EDIT-->
+}

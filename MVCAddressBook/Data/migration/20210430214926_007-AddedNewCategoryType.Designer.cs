@@ -3,15 +3,17 @@ using System;
 using MVCAddressBook.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MVCAddressBook.data.migration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210430214926_007-AddedNewCategoryType")]
+    partial class _007AddedNewCategoryType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,13 +304,11 @@ namespace MVCAddressBook.data.migration
 
             modelBuilder.Entity("MVCAddressBook.Models.Contact", b =>
                 {
-                    b.HasOne("MVCAddressBook.Models.Category", "Category")
+                    b.HasOne("MVCAddressBook.Models.Category", null)
                         .WithMany("Contact")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
